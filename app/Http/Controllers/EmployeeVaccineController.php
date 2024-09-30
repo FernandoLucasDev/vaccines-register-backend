@@ -31,14 +31,15 @@ class EmployeeVaccineController extends Controller
         $employee = Employees::findOrFail($employeeId);
 
         $pivotData = $employee->vaccines()->wherePivot('vaccines_id', 1)->first();
+
         if ($pivotData) {
             $employee->vaccines()->updateExistingPivot(1, [
                 'vaccines_id' => $request->vaccine_id,
-                'batch' => $request->batch,
-                'validate_date' => $request->validate_date,
-                'first_dose_vaccine' => $request->first_dose_vaccine,
-                'second_dose_vaccine' => $request->second_dose_vaccine,
-                'third_dose_vaccine' => $request->third_dose_vaccine,
+                'batch' => $vaccineId != 1 ? $request->batch : null,
+                'validate_date' => $vaccineId != 1 ? $request->validate_date : null,
+                'first_dose_vaccine' => $vaccineId != 1 ? $request->first_dose_vaccine : null,
+                'second_dose_vaccine' => $vaccineId != 1 ? $request->second_dose_vaccine : null,
+                'third_dose_vaccine' => $vaccineId != 1 ? $request->third_dose_vaccine : null,
             ]);
 
             return response()->json(['message' => 'Vaccine record updated.']);
